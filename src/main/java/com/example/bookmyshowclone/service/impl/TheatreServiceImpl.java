@@ -1,5 +1,6 @@
 package com.example.bookmyshowclone.service.impl;
 
+import com.example.bookmyshowclone.exception.CityNotFoundException;
 import com.example.bookmyshowclone.models.City;
 import com.example.bookmyshowclone.models.Theatre;
 import com.example.bookmyshowclone.repository.TheatreRepository;
@@ -25,7 +26,7 @@ public class TheatreServiceImpl implements TheatreService {
     public Iterable<Theatre> getAllTheatre(int cityId) {
         Optional<City> cityOptional = cityService.getCity(cityId);
         if (cityOptional.isEmpty()) {
-            throw new RuntimeException("City with id: " + cityId + " not found");
+            throw new CityNotFoundException("City with id: " + cityId + " not found");
         }
         City city = cityOptional.get();
         log.info("Finding all theatres for " + city.getName());
@@ -38,11 +39,10 @@ public class TheatreServiceImpl implements TheatreService {
         Optional<City> cityOptional = cityService.getCity(cityId);
         if (cityOptional.isEmpty()) {
             log.info("City with id: " + cityId + " not found");
-            throw new RuntimeException("City with id: " + cityId + " not found");
+            throw new CityNotFoundException("City with id: " + cityId + " not found");
         }
         City city = cityOptional.get();
         theatre.setCity(city);
-        theatreRepository.save(theatre);
-        return theatre;
+        return theatreRepository.save(theatre);
     }
 }
